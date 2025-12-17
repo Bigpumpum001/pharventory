@@ -68,8 +68,8 @@ export default function EditMedicineModal({
       setFormData({
         name: m.name || "",
         genericName: m.genericName || "",
-        categoryId: m.category.id ?? null,
-        unitId: m.unit.id ?? null,
+        categoryId: m.category?.id ?? null,
+        unitId: m.unit?.id ?? null,
         price: m.price ?? 0,
         supplier: m.supplier || "",
         imageUrl: imageUrl,
