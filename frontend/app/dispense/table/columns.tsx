@@ -33,11 +33,12 @@ export const getColumns = (
       return (
               <div className="flex items-center justify-center">
                 {gcsUrl ? (
-                  <div className="relative h-20 w-full sm:h-25">
+                  <div className="relative h-12 w-12 sm:w-16 sm:h-16">
                     <Image
                       src={gcsUrl}
                       alt={medicine.name}
                       fill
+                      // sizes="(max-width: 640px) 48px, 64px"
                       className="rounded-md object-contain"
                       onError={(e) => {
                         e.currentTarget.src = "/images/logo/logo.png";

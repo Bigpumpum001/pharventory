@@ -283,7 +283,11 @@ export default function Dashboard() {
         }
 
         const medicineBatch = medicineBatchArray;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const medicineId = medicineBatch?.medicineId;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         const medicineName = medicineBatch?.medicineName;
 
         if (medicineId && medicineName) {

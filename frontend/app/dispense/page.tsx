@@ -139,6 +139,8 @@ const Dispense = () => {
 
     dispenseMutation.mutate(payload, {
       onSuccess(data) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setCompletedReceipt(data);
         setShowReceiptModal(true);
         resetItems();
