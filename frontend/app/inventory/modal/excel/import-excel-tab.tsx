@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import ExcelPreviewTable from "./excel-preview-table";
-import { useImportExcel } from "@/hooks/useBatches";
 import { ImportType, ExcelRowData } from "@/types/medicines";
 
 const IMPORT_TYPES = {
