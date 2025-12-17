@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useBatches } from "@/hooks/useBatches";
 import {
   Dialog,
@@ -10,11 +10,10 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { X, Edit } from "lucide-react";
+import { Edit } from "lucide-react";
 import { useInventoryUI } from "@/store/useInventoryUI";
 import EditBatchModal from "./edit-batch-modal";
 import { MedicineBatch } from "@/types/medicines";
-import useMedicines from "@/hooks/useMedicines";
 
 interface ViewBatchesModalProps {
   showExpired?: boolean;

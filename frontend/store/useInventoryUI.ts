@@ -5,7 +5,7 @@ import { Medicine, MedicineBatch, UpdateMedicineBatchPayload } from "@/types/med
 // Types for modal payloads
 interface ViewBatchesPayload {
   medicine: Medicine;
-  batches: MedicineBatch[];
+  batches: MedicineBatch[] | undefined;
   showExpired?: boolean;
 }
 
@@ -14,7 +14,7 @@ interface EditMedicinePayload {
 }
 
 interface EditBatchPayload {
-  medicine: Medicine;
+  medicine: Medicine | undefined;
   batch: MedicineBatch;
 }
 

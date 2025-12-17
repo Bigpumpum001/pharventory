@@ -276,8 +276,6 @@ export const getColumns = (showExpired = false): ColumnDef<Medicine>[] => [
               onClick={() =>
                 useInventoryUI.getState().openViewBatches({
                   medicine: row.original,
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
                   batches: row.original.batches,
                 })
               }
