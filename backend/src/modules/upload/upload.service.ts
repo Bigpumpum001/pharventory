@@ -56,11 +56,6 @@ export class UploadService {
         },
       });
 
-      // this.logger.log('File saved to GCS, making public...');
-
-      // // Make file public
-      // await fileRef.makePublic();
-
       this.logger.log('File made public successfully');
 
       // Get public URL - return both GCS URL and local path

@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://pharventory.vercel.app/'], // Frontend URL
+    origin: ['http://localhost:3000', 'https://pharventory.vercel.app'], // Frontend URL
     // credentials: true, // Allow cookies
   });
   // app.enableCors();

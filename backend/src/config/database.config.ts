@@ -18,11 +18,8 @@ export default () => ({
     database: process.env.DB_NAME,
     synchronize: process.env.DB_SYNC === 'true' ? true : false, // สำหรับ dev เท่านั้น
     logging: process.env.DB_LOGGING === 'true' ? true : false,
-    // Force IPv4 connection
-    // extra: {
-    //   ssl: {
-    //     rejectUnauthorized: false,
-    //   },
-    // },
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
 });

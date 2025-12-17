@@ -1,9 +1,10 @@
-FROM node:lts-alpine
+# ---------- Build stage ----------
+FROM node:lts-alpine AS builder
 
-# Install all dependencies (including devDependencies for building)
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install --silent
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
 
 # Copy source code
 COPY . .
@@ -11,15 +12,18 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Remove devDependencies to reduce image size
-RUN npm prune --production
+# ---------- Production stage ----------
+FROM node:lts-alpine
+WORKDIR /app
 
-# Create non-root user and set permissions
-RUN chown -R node:node /usr/src/app
+COPY package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=builder /app/dist ./dist
+
 USER node
 
 # Expose the correct port (matches main.ts default)
 EXPOSE 3001
 
-# Use production start command
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main.js"]

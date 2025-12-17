@@ -25,7 +25,6 @@ export class AuthService {
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash: _, ...result } = user;
-
     return result;
   }
   login(user: Omit<User, 'passwordHash'>): AuthResponeseDto {
