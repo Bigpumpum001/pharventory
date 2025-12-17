@@ -1,6 +1,7 @@
 services:
   backend:
-    # image: pharventory
+    # container_name: pharventory
+    image: pharventory
     build:
       context: backend
       dockerfile: ./Dockerfile
@@ -19,6 +20,5 @@ services:
   #     - "6379:6379"
   #   volumes:
   #     - redis-data:/data
-
 # volumes:
 #   redis-data:
