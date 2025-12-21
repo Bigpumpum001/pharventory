@@ -63,8 +63,8 @@ const items = [
 function AppSidebar() {
   const path = usePathname();
   return (
-    <Sidebar className="border-slate-900">
-      <SidebarContent className="bg-slate-900">
+    <Sidebar className="border-slate-900 !border-slate-900">
+      <SidebarContent className="bg-slate-900 h-screen ">
         <SidebarGroup>
           <SidebarGroupLabel className="px-3 py-8 gap-3 flex items-center">
             <div className="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center">

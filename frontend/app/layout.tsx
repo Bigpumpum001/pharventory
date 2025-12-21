@@ -9,7 +9,6 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import AppSidebar from "./components/AppSidebar";
-import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import ReactQueryProvider from "./components/ReactQueryProvider";
 import AuthProvider from "./components/AuthProvider";

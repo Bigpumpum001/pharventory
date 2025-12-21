@@ -87,11 +87,6 @@ export function useAuth() {
           fontSize:"15px"
         },
       });
-      // if (error instanceof Error) {
-      //   toast.error(error.message || "Login failed. Please check your credentials.");
-      // } else {
-      //   toast.error("Login failed. Please check your credentials.");
-      // }
     },
   });
 

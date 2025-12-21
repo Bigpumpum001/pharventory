@@ -21,9 +21,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       router.push("/login");
     }
     
-    // If authenticated and on login page, redirect to dashboard
-    if (isAuthenticated && pathname === "/login") {
-      toast.success("Login successful");
+    // If authenticated and on login page or root, redirect to dashboard
+    if (isAuthenticated && (pathname === "/login" || pathname === "/")) {
+      toast.success("Redirecting to dashboard");
       router.push("/dashboard");
     }
   }, [isAuthenticated, pathname, router]);

@@ -5,14 +5,7 @@ import useReceipts from "@/hooks/useReceipts";
 import { useReceiptStore, ReceiptRange } from "@/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+import { ReceiptModal } from "./receipt-modal";
 
 type ReceiptItemType = {
   id: number;
@@ -470,78 +463,12 @@ function Receipt() {
         )}
 
         {/* Receipt modal */}
-        <Dialog
+        <ReceiptModal
           open={showReceiptModal}
-          onOpenChange={(open) => setShowReceiptModal(open)}
-        >
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Receipt #{selectedReceipt?.id}</DialogTitle>
-              <DialogDescription>
-                Patient: {selectedReceipt?.patientName ?? "Unknown"} • Date:{" "}
-                {selectedReceipt ? formatDate(selectedReceipt.createdAt) : ""}
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="space-y-4">
-              <Table className="w-full text-sm">
-                <TableHeader>
-                  <TableRow className="text-left text-xs text-slate-500">
-                    <TableHead>Medicine</TableHead>
-                    <TableHead>Batch</TableHead>
-                    <TableHead className="text-right">Qty</TableHead>
-                    <TableHead className="text-right">Price</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {(selectedReceipt?.items ?? []).map((it) => (
-                    <TableRow key={it.id} className="border-t">
-                      <TableCell className="py-2">
-                        {it.medicineBatch?.medicine?.name ??
-                          it.medicineBatch?.name}
-                      </TableCell>
-                      <TableCell className="py-2">
-                        {it.medicineBatch?.batchNumber}
-                      </TableCell>
-                      <TableCell className="py-2 text-right">
-                        {it.quantity}
-                      </TableCell>
-                      <TableCell className="py-2 text-right">
-                        ฿{Number(it.price ?? 0).toFixed(2)}
-                      </TableCell>
-                      <TableCell className="py-2 text-right">
-                        ฿{(Number(it.price ?? 0) * it.quantity || 0).toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-
-            <DialogFooter>
-              <div className="flex items-center justify-between w-full">
-                <div />
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowReceiptModal(false)}
-                  >
-                    Close
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    onClick={printReceipt}
-                    disabled={!selectedReceipt}
-                  >
-                    Print / Download PDF
-                  </Button>
-                </div>
-              </div>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+          onOpenChange={setShowReceiptModal}
+          selectedReceipt={selectedReceipt}
+          onPrintReceipt={printReceipt}
+        />
       </div>
     </div>
   );
