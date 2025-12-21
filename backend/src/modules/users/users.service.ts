@@ -28,7 +28,9 @@ export class UsersService {
     return this.userRepo.save(user);
   }
   async findByUsername(username: string) {
-    return this.userRepo.findOne({ where: { username: username } });
+    return this.userRepo.findOne({
+      where: { username: username },
+    });
   }
   async findAllUser() {
     return await this.userRepo.find({ relations: ['role'] });

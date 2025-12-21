@@ -12,7 +12,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async validateUser(data: LoginDTO) {
-    const user = await this.usersService.findByUsername(data.username);
+    const user = await this.usersService.findByUsername(
+      data.username.toLowerCase(),
+    );
     if (!user) {
       throw new Error('Invalid username or password');
     }
