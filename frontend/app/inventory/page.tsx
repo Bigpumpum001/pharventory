@@ -28,17 +28,19 @@ import EditMedicineModal from "./modal/medicine/edit-medicine-modal";
 // import DeleteMedicineModal from "./modal/medicine/delete-medicine-modal";
 import AddCategoryUnitModal from "./modal/category/add-category-unit-modal";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import Image from "next/image";
 
 function Inventory() {
   const [showExpired, setShowExpired] = useState(false);
   const { medicinesQuery } = useMedicines(showExpired);
-  const { shouldRefetchMedicines, resetRefetchMedicinesTrigger } = useInventoryUI();
+  const { shouldRefetchMedicines, resetRefetchMedicinesTrigger } =
+    useInventoryUI();
   const data = medicinesQuery.data ?? [];
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const status = showExpired
     ? ["Expired"]
-    : ["Normal", "Low Stock", "Critical"];
+    : ["Normal", "Low Stock", "Critical", "Out Of Stock"];
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
   const totalStock = data.reduce((sum, med) => sum + med.totalStock, 0);
 
@@ -55,14 +57,42 @@ function Inventory() {
     (med) => med.totalStock >= 25 && med.totalStock < 100
   ).length;
   const criticalStockCount = data.filter(
-    (med) => med.totalStock >= 0 && med.totalStock < 25
+    (med) => med.totalStock >= 1 && med.totalStock < 25
+  ).length;
+  const outOfStockCount = data.filter(
+    (med) => med.totalStock === 0
   ).length;
   return (
     <div className="p-8">
-      <div className=" grid grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+      <div className=" grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <Card className="bg-slate-800 border-3 border-slate-900 rounded-lg transition-colors">
-          <CardContent className="flex items-center justify-between mb-0 gap-2" >
-            <div
+          <CardContent className="flex items-center justify-between mb-0 gap-2">
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+              {showExpired ? (
+                <Image
+                  src={"/images/logo/expired_batches.jpg"}
+                  alt={"expired_batches image"}
+                  fill
+                  className="rounded-full object-contain"
+                  sizes="(max-width: 640px) 48px, 64px"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/logo/logo.png";
+                  }}
+                />
+              ) : (
+                <Image
+                  src={"/images/logo/logo_med_only.jpg"}
+                  alt={"logo_med_only image"}
+                  fill
+                  className="rounded-full object-contain"
+                  sizes="(max-width: 640px) 48px, 64px"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/logo/logo.png";
+                  }}
+                />
+              )}
+            </div>
+            {/* <div
               className={`w-12 h-12 rounded-lg flex items-center justify-center `}
             >
               {showExpired ? (
@@ -70,12 +100,12 @@ function Inventory() {
               ) : (
                 <Pill className="w-12 h-12 text-sky-600" />
               )}
-            </div>
+            </div> */}
             <div className="text-center">
-              <CardTitle className="text-sm text-slate-300 mb-1">
-                {showExpired ? "Total Expired Items" : "Total Items"}
+              <CardTitle className="sm:text-lg text-slate-300 mb-1">
+                {showExpired ? "Expired Items" : "Total Items"}
               </CardTitle>
-              <CardTitle className="sm:text-3xl font-bold text-white ">
+              <CardTitle className="sm:text-3xl font-bold text-white text-center">
                 {totalStock}
               </CardTitle>
             </div>
@@ -87,15 +117,27 @@ function Inventory() {
         {!showExpired && (
           <>
             <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg   transition-colors">
-              <CardContent className="flex items-center justify-between gap-2">
-                <div className="w-12 h-12  rounded-lg flex items-center justify-center">
+              <CardContent className="flex items-center justify-between gap-2 ">
+                {/* <div className="w-12 h-12  rounded-lg flex items-center justify-center ">
                   <AlertTriangle className="w-12 h-12 text-rose-600" />
+                </div> */}
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+                  <Image
+                    src={"/images/logo/critical_stock.jpg"}
+                    alt={"critical_stock image"}
+                    fill
+                    className="rounded-full object-contain"
+                    sizes="(max-width: 640px) 48px, 64px"
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/logo/logo.png";
+                    }}
+                  />
                 </div>
                 <div className="text-center">
-                  <CardTitle className="text-sm text-slate-300 mb-1">
+                  <CardTitle className="sm:text-lg text-slate-300 mb-1">
                     Critical Stock
                   </CardTitle>
-                  <CardTitle className="sm:text-3xl font-bold text-white">
+                  <CardTitle className="sm:text-3xl font-bold text-white text-center">
                     {criticalStockCount}
                   </CardTitle>
                 </div>
@@ -103,15 +145,55 @@ function Inventory() {
             </Card>
             <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg transition-colors">
               <CardContent className="flex items-center justify-between gap-2">
-                <div className="w-12 h-12  rounded-lg flex items-center justify-center">
+                {/* <div className="w-12 h-12  rounded-lg flex items-center justify-center ">
                   <AlertCircle className="w-12 h-12 text-amber-600" />
+                </div> */}
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+                  <Image
+                    src={"/images/logo/low_stock.jpg"}
+                    alt={"low_stock image"}
+                    fill
+                    className="rounded-full object-contain"
+                    sizes="(max-width: 640px) 48px, 64px"
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/logo/logo.png";
+                    }}
+                  />
                 </div>
                 <div className="text-center">
-                  <CardTitle className="text-sm text-slate-300 mb-1">
+                  <CardTitle className="sm:text-lg text-slate-300 mb-1">
                     Low Stock
                   </CardTitle>
-                  <CardTitle className="sm:text-3xl font-bold text-white">
+                  <CardTitle className="sm:text-3xl font-bold text-white text-center">
                     {lowStockCount}
+                  </CardTitle>
+                </div>
+              </CardContent>
+            </Card>
+            {/* Out Of stock */}
+            <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg transition-colors">
+              <CardContent className="flex items-center justify-between gap-2">
+                {/* <div className="w-12 h-12  rounded-lg flex items-center justify-center ">
+                  <AlertTriangle className="w-12 h-12 text-rose-600" />
+                </div> */}
+                <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+                  <Image
+                    src={"/images/logo/out_of_stock.jpg"}
+                    alt={"out_of_stock image"}
+                    fill
+                    className="rounded-full object-contain"
+                    sizes="(max-width: 640px) 48px, 64px"
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/logo/logo.png";
+                    }}
+                  />
+                </div>
+                <div className="text-center">
+                  <CardTitle className="sm:text-lg text-slate-300 mb-1">
+                    Out Of Stock
+                  </CardTitle>
+                  <CardTitle className="sm:text-3xl font-bold text-white text-center">
+                    {outOfStockCount}
                   </CardTitle>
                 </div>
               </CardContent>
@@ -131,8 +213,9 @@ function Inventory() {
         <div className="grid grid-cols-2 lg:flex gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="default"
-              className="border-2 border-slate-900 hover:bg-slate-600"
+              <Button
+                variant="default"
+                className="border-2 border-slate-900 hover:bg-slate-600"
               >
                 {selectedStatus.length
                   ? selectedStatus.join(", ")

@@ -22,8 +22,8 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   return (
     <Card className="bg-slate-800 border-3 border-slate-900 rounded-lg">
       <CardContent className="">
-        <CardTitle className=" text-sm text-slate-300">{title}</CardTitle>
-        <p className={`sm:text-3xl font-semibold mt-2 ${textColor}`}>{value}</p>
+        <CardTitle className=" sm:text-lg text-slate-300 mb-1">{title}</CardTitle>
+        <p className={`sm:text-3xl font-semibold  ${textColor}`}>{value}</p>
       </CardContent>
     </Card>
   );

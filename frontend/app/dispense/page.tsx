@@ -52,14 +52,18 @@ type CompletedReceiptView = {
 interface DispenseCardProps {
   title: string;
   value: string | number;
+  titleColor:string
+  valueColor: string;
 }
 
-const DispenseCard: React.FC<DispenseCardProps> = ({ title, value }) => {
+const DispenseCard: React.FC<DispenseCardProps> = ({ title, value,valueColor,titleColor }) => {
   return (
     <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg ">
       <CardContent className="">
-        <CardTitle className=" text-sm text-slate-300">{title}</CardTitle>
-        <p className={`sm:text-3xl font-semibold mt-2 text-white`}>{value}</p>
+        <CardTitle className={`sm:text-lg text-slate-300 ${titleColor} `}>
+          {title}
+        </CardTitle>
+        <p className={`sm:text-3xl font-semibold mt-1  ${valueColor} `}>{value}</p>
       </CardContent>
     </Card>
   );
@@ -236,11 +240,23 @@ const Dispense = () => {
     <div className="p-8">
       <div className=" space-y-4 sm:space-y-6 px-2 sm:px-0">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <DispenseCard title="Selected Medicines" value={totals.totalItems} />
-          <DispenseCard title="Total Quantity" value={totals.totalQuantity} />
+          <DispenseCard
+            title="Selected Medicines"
+            value={totals.totalItems}
+            titleColor="text-slate-300"
+            valueColor="text-white"
+          />
+          <DispenseCard
+            title="Total Quantity"
+            value={totals.totalQuantity}
+            titleColor="text-slate-300"
+            valueColor="text-white"
+          />
           <DispenseCard
             title="Estimated Cost"
             value={`฿${totals.estimated.toFixed(2)}`}
+            titleColor="text-slate-300"
+            valueColor="text-emerald-400"
           />
         </div>
 

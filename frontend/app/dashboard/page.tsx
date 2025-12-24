@@ -23,10 +23,10 @@ import {
   ShoppingCart,
   Activity,
   Pill,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import { useMedicineStore } from "@/store/useMedicineStore";
 import ChartBarMinimal from "./ChartBarMinimal";
 import { toast } from "sonner";
@@ -51,6 +51,7 @@ interface KPICardProps {
   icon: React.ReactNode;
   iconBg: string;
   iconColor: string;
+  imagePath: string;
 }
 
 const KPICard: React.FC<KPICardProps> = ({
@@ -61,20 +62,33 @@ const KPICard: React.FC<KPICardProps> = ({
   icon,
   iconBg,
   iconColor,
+  imagePath,
 }) => {
   return (
-    <Card className="bg-slate-800 border-3 border-slate-900 rounded-lg   transition-colors ">
+    <Card className="flex justify-center bg-slate-800 border-3 border-slate-900 rounded-lg   transition-colors ">
       {/* border-slate-600/70 */}
       <CardContent className="">
-        <div className="flex items-center justify-between gap-2 ">
+        <div className="flex items-center justify-between gap-3 ">
           {/* ${iconBg} */}
-          <div
+          {/* <div
             className={`w-12 h-12  rounded-lg flex items-center justify-center`}
           >
             {icon}
+          </div> */}
+          <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+            <Image
+              src={imagePath}
+              alt={title + " image"}
+              fill
+              className="rounded-full object-contain"
+              sizes="(max-width: 640px) 48px, 64px"
+              onError={(e) => {
+                e.currentTarget.src = "/images/logo/logo.png";
+              }}
+            />
           </div>
           <div className="">
-            <CardTitle className=" text-sm text-slate-300 mb-1 text-center">
+            <CardTitle className=" sm:text-lg text-slate-300  mb-1 text-center">
               {title}
             </CardTitle>
             <p className={`sm:text-2xl font-bold text-white text-center`}>
@@ -109,7 +123,7 @@ const AlertItem: React.FC<AlertItemProps> = ({
   const getBadgeColor = () => {
     if (badge === "Low") return "bg-yellow-300 text-black ";
     if (badge === "Critical") return "bg-red-600 text-slate-100";
-    if (badge === "Expired") return "bg-slate-300 text-slate-800";
+    if (badge === "Expired" || badge === "Out Of Stock") return "bg-slate-300 text-slate-800";
     return "";
   };
 
@@ -233,7 +247,7 @@ export default function Dashboard() {
   }, [medicines]);
 
   const criticalStockItems = useMemo(() => {
-    return medicines.filter((med) => med.totalStock >= 0 && med.totalStock < 25)
+    return medicines.filter((med) => med.totalStock >= 1 && med.totalStock < 25)
       .length;
   }, [medicines]);
 
@@ -241,6 +255,10 @@ export default function Dashboard() {
     return medicines.filter(
       (med) => med.totalStock >= 25 && med.totalStock < 100
     ).length;
+  }, [medicines]);
+
+  const outOfStockItems = useMemo(() => {
+    return medicines.filter((med) => med.totalStock === 0).length;
   }, [medicines]);
 
   const expiredStockItems = useMemo(() => {
@@ -344,7 +362,7 @@ export default function Dashboard() {
   // Critical stock alerts
   const criticalStockAlerts = useMemo(() => {
     return medicines
-      .filter((med) => med.totalStock >= 0 && med.totalStock < 25)
+      .filter((med) => med.totalStock >= 1 && med.totalStock < 25)
       .sort((a, b) => a.totalStock - b.totalStock)
 
       .map((med) => ({
@@ -352,6 +370,22 @@ export default function Dashboard() {
         stock: med.totalStock,
         isCritical: true,
         status: "Critical",
+        id: med.id,
+        genericName: med.genericName || "",
+        price: med.price || 0,
+        totalStock: med.totalStock,
+      }));
+  }, [medicines]);
+
+  // Out of stock alerts
+  const outOfStockAlerts = useMemo(() => {
+    return medicines
+      .filter((med) => med.totalStock === 0)
+      .map((med) => ({
+        name: med.name,
+        stock: med.totalStock,
+        isCritical: true,
+        status: "Out Of Stock",
         id: med.id,
         genericName: med.genericName || "",
         price: med.price || 0,
@@ -531,13 +565,14 @@ export default function Dashboard() {
     <div className="p-8">
       <div className=" space-y-6">
         {/* KPI Overview Zone */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-3">
           <KPICard
             title="Today's Revenue"
             value={formatCurrency(todayRevenue)}
             icon={<DollarSign className="w-12 h-12 text-emerald-500/90" />}
             iconBg="bg-emerald-100"
             iconColor="text-emerald-600"
+            imagePath="/images/logo/revenue.jpg"
           />
           <KPICard
             title="Total Stock"
@@ -545,6 +580,7 @@ export default function Dashboard() {
             icon={<Pill className="w-12 h-12 text-sky-600" />}
             iconBg="bg-blue-100"
             iconColor="text-blue-600"
+            imagePath="/images/logo/logo_med_only.jpg"
           />
           <KPICard
             title="Critical Stock"
@@ -552,6 +588,7 @@ export default function Dashboard() {
             icon={<AlertTriangle className="w-12 h-12 text-rose-500/70" />}
             iconBg="bg-red-100"
             iconColor="text-red-600"
+            imagePath="/images/logo/critical_stock.jpg"
           />
           <KPICard
             title="Low Stock"
@@ -559,6 +596,15 @@ export default function Dashboard() {
             icon={<AlertTriangle className="w-12 h-12 text-yellow-600/70" />}
             iconBg="bg-yellow-100"
             iconColor="text-yellow-600"
+            imagePath="/images/logo/low_stock.jpg"
+          />
+          <KPICard
+            title="Out Of Stock"
+            value={outOfStockItems}
+            icon={<Clock className="w-12 h-12 text-slate-500/70" />}
+            iconBg="bg-gray-100"
+            iconColor="text-gray-600"
+            imagePath="/images/logo/out_of_stock.jpg"
           />
           <KPICard
             title="Expired Batches"
@@ -566,6 +612,7 @@ export default function Dashboard() {
             icon={<Clock className="w-12 h-12 text-slate-500/70" />}
             iconBg="bg-gray-100"
             iconColor="text-gray-600"
+            imagePath="/images/logo/expired_batches.jpg"
           />
         </div>
 
@@ -879,6 +926,36 @@ export default function Dashboard() {
               ) : (
                 <p className="text-sm text-slate-100 text-center py-4">
                   No expired batches
+                </p>
+              )}
+            </CardContent>
+          </Card>
+          {/* Out Of Stock */}
+          <Card className="bg-iceblue border-3 rounded-sm border-slate-700 pt-0">
+            <CardHeader className="bg-slate-800    py-3 flex items-center">
+              <CardTitle className="flex items-center gap-2">
+                <X className="w-5 h-5 text-red-600" />
+                <p className="text-slate-100 font-semibold text-xl">
+                   Out Of Stock
+                </p>
+              </CardTitle>
+            </CardHeader>
+             <CardContent className="space-y-3 max-h-64 overflow-y-auto">
+              {outOfStockAlerts.length > 0 ? (
+                outOfStockAlerts.map((medicine, index) => (
+                  <AlertItem
+                    key={index}
+                    title={medicine.name}
+                    subtitle={`Current stock: ${medicine.stock} units`}
+                    badge="Out Of Stock"
+                    badgeVariant="destructive"
+                    showReorderButton={true}
+                    onReorder={() => handleReorder(medicine)}
+                  />
+                ))
+              ) : (
+                <p className="text-sm text-slate-100 text-center py-4">
+                  No out of stock items
                 </p>
               )}
             </CardContent>

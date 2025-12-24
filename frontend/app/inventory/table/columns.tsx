@@ -15,13 +15,15 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 const LOW_STOCK_THRESHOLD = 100;
 const CRITICAL_STOCK_THRESHOLD = 25;
+const OUT_OF_STOCK_THRESHOLD = 0;
 
 export const getStockStatus = (stock: number | undefined) => {
   if (typeof stock !== "number") return "Normal";
 
+  if (stock === 0) return "Out Of Stock";
   if (stock >= CRITICAL_STOCK_THRESHOLD && stock < LOW_STOCK_THRESHOLD)
     return "Low Stock";
-  if (stock >= 0 && stock < LOW_STOCK_THRESHOLD) return "Critical";
+  if (stock >= 0 && stock < CRITICAL_STOCK_THRESHOLD) return "Critical";
   return "Normal";
 };
 
@@ -88,6 +90,8 @@ export const getColumns = (showExpired = false): ColumnDef<Medicine>[] => [
           ? "bg-emerald-600 text-white"
           : status === "Low Stock"
           ? "bg-yellow-300 text-black"
+          : status === "Out Of Stock"
+          ? "bg-gray-600 text-white"
           : status === "Expired"
           ? "bg-red-600/70 text-white"
           : "bg-red-600/70 text-white";
@@ -195,6 +199,8 @@ export const getColumns = (showExpired = false): ColumnDef<Medicine>[] => [
           ? "bg-emerald-600 text-white"
           : status === "Low Stock"
           ? "bg-yellow-300 text-black"
+          : status === "Out Of Stock"
+          ? "bg-gray-600 text-white"
           : status === "Expired"
           ? "bg-red-600/70 text-white"
           : "bg-red-600/70 text-white";
