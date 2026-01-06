@@ -24,7 +24,7 @@ The system addresses complex stock management challenges, minimizes human error,
     - Expired / Expiring Batches
   
 ### 💊Inventory Management
-- **Advanced Search & Filtering**
+- **Search & Filtering**
   - Filter by stock status (Normal, Low Stock, Critical Stock, Out of Stock)
   - Separate views for expired and near-expiry medicines
 - **Medicine List Management**
@@ -38,10 +38,8 @@ The system addresses complex stock management challenges, minimizes human error,
 - **Linked medicine and batch details**
 - **Operator tracking**
 - **Timestamped transaction records**
-**This system reduces operational errors and supports future audit requirements.**
 
 ### 🧾 Receipt History
-- **This system reduces operational errors and supports future audit requirements.**
 - **View dispensed medicines, quantities, prices, patient names, and timestamps**
 - **Synchronized withdispensing systems**
   
@@ -137,6 +135,7 @@ app/
 - Reduced inventory management time
 - Fewer data entry and dispensing errors
 - Faster dispensing workflow
+- This system reduces operational errors and supports future audit requirements
 
 ### 💰 Cost Reduction
 - Minimized losses from expired medicines
