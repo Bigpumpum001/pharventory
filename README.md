@@ -125,7 +125,7 @@ app/
 
 ### 📈 Business
 - Stock turnover and sales analytics
-- Fully transactional data handling
+- Transactional data handling
 
 ---
 
@@ -136,11 +136,6 @@ app/
 - Fewer data entry and dispensing errors
 - Faster dispensing workflow
 - This system reduces operational errors and supports future audit requirements
-
-### 💰 Cost Reduction
-- Minimized losses from expired medicines
-- Improved staff productivity
-
 
 
 
