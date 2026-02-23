@@ -4,8 +4,8 @@ import { useMemo } from "react";
 import useStockLogs from "@/hooks/useStockLogs";
 import { useStockLogStore } from "@/store";
 
-import { DataTable } from "./table/data-table";
-import { columns } from "./table/columns";
+import { DataTable } from "../../components/features/stocklogs/table/data-table";
+import { columns } from "../../components/features/stocklogs/table/columns";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 interface SummaryCardProps {
@@ -20,10 +20,12 @@ const SummaryCard: React.FC<SummaryCardProps> = ({
   textColor,
 }) => {
   return (
-    <Card className="bg-slate-800 border-3 border-slate-900 rounded-lg">
+    <Card className="rounded-lg border-3 border-slate-900 bg-slate-800">
       <CardContent className="">
-        <CardTitle className=" sm:text-lg text-slate-300 mb-1">{title}</CardTitle>
-        <p className={`sm:text-3xl font-semibold  ${textColor}`}>{value}</p>
+        <CardTitle className="mb-1 text-slate-300 sm:text-lg">
+          {title}
+        </CardTitle>
+        <p className={`font-semibold sm:text-3xl ${textColor}`}>{value}</p>
       </CardContent>
     </Card>
   );
@@ -43,7 +45,7 @@ function StockLogs() {
       .filter((log) => log.action.includes("OUT"))
       .reduce((sum, log) => sum + log.quantityChange, 0);
     const adjustments = logs.filter((log) =>
-      log.action.includes("ADJUST")
+      log.action.includes("ADJUST"),
     ).length;
 
     return {
@@ -56,8 +58,8 @@ function StockLogs() {
 
   return (
     <div className="p-8">
-      <div className=" space-y-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <SummaryCard
             title="Total Logs"
             value={summary.totalLogs}

@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from "react";
 import useMedicines from "@/hooks/useMedicines";
 import { useInventoryUI } from "@/store/useInventoryUI";
-import { getColumns } from "./table/columns";
-import { DataTable } from "./table/data-table";
+import { getColumns } from "../../components/features/inventory/table/columns";
+import { DataTable } from "../../components/features/inventory/table/data-table";
 import { Command, CommandInput } from "@/components/ui/command";
 import {
   ChevronDown,
@@ -22,11 +22,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import AddMedicineModal from "./modal/medicine/add-medicine-modal";
-import ViewBatchesModal from "./modal/batches/view-batches-modal";
-import EditMedicineModal from "./modal/medicine/edit-medicine-modal";
+import AddMedicineModal from "../../components/features/inventory/modal/medicine/add-medicine-modal";
+import ViewBatchesModal from "../../components/features/inventory/modal/batches/view-batches-modal";
+import EditMedicineModal from "../../components/features/inventory/modal/medicine/edit-medicine-modal";
 // import DeleteMedicineModal from "./modal/medicine/delete-medicine-modal";
-import AddCategoryUnitModal from "./modal/category/add-category-unit-modal";
+import AddCategoryUnitModal from "../../components/features/inventory/modal/category/add-category-unit-modal";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 
@@ -54,20 +54,18 @@ function Inventory() {
 
   // Calculate actual counts for status cards
   const lowStockCount = data.filter(
-    (med) => med.totalStock >= 25 && med.totalStock < 100
+    (med) => med.totalStock >= 25 && med.totalStock < 100,
   ).length;
   const criticalStockCount = data.filter(
-    (med) => med.totalStock >= 1 && med.totalStock < 25
+    (med) => med.totalStock >= 1 && med.totalStock < 25,
   ).length;
-  const outOfStockCount = data.filter(
-    (med) => med.totalStock === 0
-  ).length;
+  const outOfStockCount = data.filter((med) => med.totalStock === 0).length;
   return (
     <div className="p-8">
-      <div className=" grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <Card className="bg-slate-800 border-3 border-slate-900 rounded-lg transition-colors">
-          <CardContent className="flex items-center justify-between mb-0 gap-2">
-            <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+      <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Card className="rounded-lg border-3 border-slate-900 bg-slate-800 transition-colors">
+          <CardContent className="mb-0 flex items-center justify-between gap-2">
+            <div className="relative h-12 w-12 shrink-0 sm:h-16 sm:w-16">
               {showExpired ? (
                 <Image
                   src={"/images/logo/expired_batches.jpg"}
@@ -102,10 +100,10 @@ function Inventory() {
               )}
             </div> */}
             <div className="text-center">
-              <CardTitle className="sm:text-lg text-slate-300 mb-1">
+              <CardTitle className="mb-1 text-slate-300 sm:text-lg">
                 {showExpired ? "Expired Items" : "Total Items"}
               </CardTitle>
-              <CardTitle className="sm:text-3xl font-bold text-white text-center">
+              <CardTitle className="text-center font-bold text-white sm:text-3xl">
                 {totalStock}
               </CardTitle>
             </div>
@@ -116,12 +114,12 @@ function Inventory() {
         </Card>
         {!showExpired && (
           <>
-            <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg   transition-colors">
-              <CardContent className="flex items-center justify-between gap-2 ">
+            <Card className="rounded-lg border-3 border-slate-900 bg-slate-900/50 transition-colors">
+              <CardContent className="flex items-center justify-between gap-2">
                 {/* <div className="w-12 h-12  rounded-lg flex items-center justify-center ">
                   <AlertTriangle className="w-12 h-12 text-rose-600" />
                 </div> */}
-                <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+                <div className="relative h-12 w-12 shrink-0 sm:h-16 sm:w-16">
                   <Image
                     src={"/images/logo/critical_stock.jpg"}
                     alt={"critical_stock image"}
@@ -134,21 +132,21 @@ function Inventory() {
                   />
                 </div>
                 <div className="text-center">
-                  <CardTitle className="sm:text-lg text-slate-300 mb-1">
+                  <CardTitle className="mb-1 text-slate-300 sm:text-lg">
                     Critical Stock
                   </CardTitle>
-                  <CardTitle className="sm:text-3xl font-bold text-white text-center">
+                  <CardTitle className="text-center font-bold text-white sm:text-3xl">
                     {criticalStockCount}
                   </CardTitle>
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg transition-colors">
+            <Card className="rounded-lg border-3 border-slate-900 bg-slate-900/50 transition-colors">
               <CardContent className="flex items-center justify-between gap-2">
                 {/* <div className="w-12 h-12  rounded-lg flex items-center justify-center ">
                   <AlertCircle className="w-12 h-12 text-amber-600" />
                 </div> */}
-                <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+                <div className="relative h-12 w-12 shrink-0 sm:h-16 sm:w-16">
                   <Image
                     src={"/images/logo/low_stock.jpg"}
                     alt={"low_stock image"}
@@ -161,22 +159,22 @@ function Inventory() {
                   />
                 </div>
                 <div className="text-center">
-                  <CardTitle className="sm:text-lg text-slate-300 mb-1">
+                  <CardTitle className="mb-1 text-slate-300 sm:text-lg">
                     Low Stock
                   </CardTitle>
-                  <CardTitle className="sm:text-3xl font-bold text-white text-center">
+                  <CardTitle className="text-center font-bold text-white sm:text-3xl">
                     {lowStockCount}
                   </CardTitle>
                 </div>
               </CardContent>
             </Card>
             {/* Out Of stock */}
-            <Card className="bg-slate-900/50 border-3 border-slate-900 rounded-lg transition-colors">
+            <Card className="rounded-lg border-3 border-slate-900 bg-slate-900/50 transition-colors">
               <CardContent className="flex items-center justify-between gap-2">
                 {/* <div className="w-12 h-12  rounded-lg flex items-center justify-center ">
                   <AlertTriangle className="w-12 h-12 text-rose-600" />
                 </div> */}
-                <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+                <div className="relative h-12 w-12 shrink-0 sm:h-16 sm:w-16">
                   <Image
                     src={"/images/logo/out_of_stock.jpg"}
                     alt={"out_of_stock image"}
@@ -189,10 +187,10 @@ function Inventory() {
                   />
                 </div>
                 <div className="text-center">
-                  <CardTitle className="sm:text-lg text-slate-300 mb-1">
+                  <CardTitle className="mb-1 text-slate-300 sm:text-lg">
                     Out Of Stock
                   </CardTitle>
-                  <CardTitle className="sm:text-3xl font-bold text-white text-center">
+                  <CardTitle className="text-center font-bold text-white sm:text-3xl">
                     {outOfStockCount}
                   </CardTitle>
                 </div>
@@ -201,16 +199,16 @@ function Inventory() {
           </>
         )}
       </div>
-      <div className="grid lg:flex p-4 bg-slate-900/50  rounded-t-lg gap-3 border-3 border-b-0 border-slate-800/80">
-        <Command className="w-4/4 lg:w-3/4 border border-b-0 bg-slate-200">
+      <div className="grid gap-3 rounded-t-lg border-3 border-b-0 border-slate-800/80 bg-slate-900/50 p-4 lg:flex">
+        <Command className="w-4/4 border border-b-0 bg-slate-200 lg:w-3/4">
           <CommandInput
-            className="placeholder:text-slate-500 text-slate-900"
+            className="text-slate-900 placeholder:text-slate-500"
             placeholder="Search medicines..."
             value={search}
             onValueChange={(value: string) => setSearch(value)}
           />
         </Command>
-        <div className="grid grid-cols-2 lg:flex gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -239,7 +237,7 @@ function Inventory() {
                       setSelectedStatus((prev) =>
                         prev.includes(status)
                           ? prev.filter((s) => s !== status)
-                          : [...prev, status]
+                          : [...prev, status],
                       );
                     }}
                   >
@@ -255,14 +253,14 @@ function Inventory() {
             onClick={() => setShowExpired((prev) => !prev)}
             className={
               showExpired
-                ? "bg-red-600/70 hover:bg-red-700/70 text-white border-red-600"
-                : "bg-amber-600/80  hover:bg-amber-700 border-2 border-amber-700/50"
+                ? "border-red-600 bg-red-600/70 text-white hover:bg-red-700/70"
+                : "border-2 border-amber-700/50 bg-amber-600/80 hover:bg-amber-700"
             }
           >
             {showExpired ? (
-              <XCircle className="w-4 h-4 mr-2" />
+              <XCircle className="mr-2 h-4 w-4" />
             ) : (
-              <AlertTriangle className="w-4 h-4 mr-2" />
+              <AlertTriangle className="mr-2 h-4 w-4" />
             )}
             {showExpired ? "Hide Expired" : "Show Expired"}
           </Button>
@@ -270,7 +268,7 @@ function Inventory() {
           <Button
             variant={"default"}
             onClick={() => setIsModalOpen(true)}
-            className="bg-emerald-700  text-white  hover:bg-emerald-800 border-2 border-emerald-900"
+            className="border-2 border-emerald-900 bg-emerald-700 text-white hover:bg-emerald-800"
           >
             <Plus />
             Add medicine

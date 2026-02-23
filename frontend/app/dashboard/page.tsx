@@ -28,7 +28,7 @@ import {
 import Image from "next/image";
 
 import { useMedicineStore } from "@/store/useMedicineStore";
-import ChartBarMinimal from "./ChartBarMinimal";
+import ChartBarMinimal from "../../components/features/dashboard/ChartBarMinimal";
 import { toast } from "sonner";
 type DateRange = "today" | "7days" | "30days" | "6months" | "1year";
 type ExpiryRange = "1month" | "3months";
@@ -65,17 +65,17 @@ const KPICard: React.FC<KPICardProps> = ({
   imagePath,
 }) => {
   return (
-    <Card className="flex justify-center bg-slate-800 border-3 border-slate-900 rounded-lg   transition-colors ">
+    <Card className="flex justify-center rounded-lg border-3 border-slate-900 bg-slate-800 transition-colors">
       {/* border-slate-600/70 */}
       <CardContent className="">
-        <div className="flex items-center justify-between gap-3 ">
+        <div className="flex items-center justify-between gap-3">
           {/* ${iconBg} */}
           {/* <div
             className={`w-12 h-12  rounded-lg flex items-center justify-center`}
           >
             {icon}
           </div> */}
-          <div className="relative w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0">
+          <div className="relative h-12 w-12 shrink-0 sm:h-16 sm:w-16">
             <Image
               src={imagePath}
               alt={title + " image"}
@@ -88,10 +88,10 @@ const KPICard: React.FC<KPICardProps> = ({
             />
           </div>
           <div className="">
-            <CardTitle className=" sm:text-lg text-slate-300  mb-1 text-center">
+            <CardTitle className="mb-1 text-center text-slate-300 sm:text-lg">
               {title}
             </CardTitle>
-            <p className={`sm:text-2xl font-bold text-white text-center`}>
+            <p className={`text-center font-bold text-white sm:text-2xl`}>
               {value}
             </p>
           </div>
@@ -123,13 +123,14 @@ const AlertItem: React.FC<AlertItemProps> = ({
   const getBadgeColor = () => {
     if (badge === "Low") return "bg-yellow-300 text-black ";
     if (badge === "Critical") return "bg-red-600 text-slate-100";
-    if (badge === "Expired" || badge === "Out Of Stock") return "bg-slate-300 text-slate-800";
+    if (badge === "Expired" || badge === "Out Of Stock")
+      return "bg-slate-300 text-slate-800";
     return "";
   };
 
   return (
     <div
-      className={`flex items-center justify-between p-3 rounded-lg bg-white/70 border border-blue-300/50 hover:bg-white transition-colors ${
+      className={`flex items-center justify-between rounded-lg border border-blue-300/50 bg-white/70 p-3 transition-colors hover:bg-white ${
         onClick ? "cursor-pointer" : ""
       }`}
       onClick={onClick}
@@ -153,7 +154,7 @@ const AlertItem: React.FC<AlertItemProps> = ({
               e.stopPropagation();
               onReorder?.();
             }}
-            className="h-7 px-2 text-xs border border-slate-300/70"
+            className="h-7 border border-slate-300/70 px-2 text-xs"
           >
             Reorder
           </Button>
@@ -166,7 +167,7 @@ export default function Dashboard() {
   const [dateRange, setDateRange] = useState<DateRange>("7days");
   const [expiryRange, setExpiryRange] = useState<ExpiryRange>("1month");
   const [topSellingTab, setTopSellingTab] = useState<"quantity" | "revenue">(
-    "quantity"
+    "quantity",
   );
   const { medicinesQuery } = useMedicines();
   const { receiptsQuery } = useReceipts();
@@ -216,7 +217,7 @@ export default function Dashboard() {
       .reduce((total, receipt) => {
         const receiptTotal = receipt.items.reduce(
           (sum, item) => sum + Number(item.price) * item.quantity,
-          0
+          0,
         );
         return total + receiptTotal;
       }, 0);
@@ -227,7 +228,7 @@ export default function Dashboard() {
     return filteredReceipts.reduce((total, receipt) => {
       const receiptTotal = receipt.items.reduce(
         (sum, item) => sum + Number(item.price) * item.quantity,
-        0
+        0,
       );
       return total + receiptTotal;
     }, 0);
@@ -253,7 +254,7 @@ export default function Dashboard() {
 
   const lowStockItems = useMemo(() => {
     return medicines.filter(
-      (med) => med.totalStock >= 25 && med.totalStock < 100
+      (med) => med.totalStock >= 25 && med.totalStock < 100,
     ).length;
   }, [medicines]);
 
@@ -327,7 +328,7 @@ export default function Dashboard() {
     return Array.from(medicineSales.values()).sort((a, b) =>
       topSellingTab === "quantity"
         ? b.quantity - a.quantity
-        : b.revenue - a.revenue
+        : b.revenue - a.revenue,
     );
     // .slice(0, 5);
   }, [filteredReceipts, topSellingTab, medicines]);
@@ -350,8 +351,8 @@ export default function Dashboard() {
           med.totalStock < 25
             ? "Critical"
             : med.totalStock < 100
-            ? "Low"
-            : "Normal",
+              ? "Low"
+              : "Normal",
         id: med.id,
         genericName: med.genericName || "",
         price: med.price || 0,
@@ -400,7 +401,7 @@ export default function Dashboard() {
       })
       .sort(
         (a, b) =>
-          new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+          new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime(),
       )
 
       .map((batch) => ({
@@ -424,7 +425,7 @@ export default function Dashboard() {
       })
       .sort(
         (a, b) =>
-          new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
+          new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime(),
       )
 
       .map((batch) => ({
@@ -504,7 +505,7 @@ export default function Dashboard() {
             sum +
             receipt.items.reduce(
               (itemSum, item) => itemSum + Number(item.price) * item.quantity,
-              0
+              0,
             )
           );
         }, 0);
@@ -563,13 +564,13 @@ export default function Dashboard() {
 
   return (
     <div className="p-8">
-      <div className=" space-y-6">
+      <div className="space-y-6">
         {/* KPI Overview Zone */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-2 lg:grid-cols-6">
           <KPICard
             title="Today's Revenue"
             value={formatCurrency(todayRevenue)}
-            icon={<DollarSign className="w-12 h-12 text-emerald-500/90" />}
+            icon={<DollarSign className="h-12 w-12 text-emerald-500/90" />}
             iconBg="bg-emerald-100"
             iconColor="text-emerald-600"
             imagePath="/images/logo/revenue.jpg"
@@ -577,7 +578,7 @@ export default function Dashboard() {
           <KPICard
             title="Total Stock"
             value={totalStock.toLocaleString()}
-            icon={<Pill className="w-12 h-12 text-sky-600" />}
+            icon={<Pill className="h-12 w-12 text-sky-600" />}
             iconBg="bg-blue-100"
             iconColor="text-blue-600"
             imagePath="/images/logo/logo_med_only.jpg"
@@ -585,7 +586,7 @@ export default function Dashboard() {
           <KPICard
             title="Critical Stock"
             value={criticalStockItems}
-            icon={<AlertTriangle className="w-12 h-12 text-rose-500/70" />}
+            icon={<AlertTriangle className="h-12 w-12 text-rose-500/70" />}
             iconBg="bg-red-100"
             iconColor="text-red-600"
             imagePath="/images/logo/critical_stock.jpg"
@@ -593,7 +594,7 @@ export default function Dashboard() {
           <KPICard
             title="Low Stock"
             value={lowStockItems}
-            icon={<AlertTriangle className="w-12 h-12 text-yellow-600/70" />}
+            icon={<AlertTriangle className="h-12 w-12 text-yellow-600/70" />}
             iconBg="bg-yellow-100"
             iconColor="text-yellow-600"
             imagePath="/images/logo/low_stock.jpg"
@@ -601,7 +602,7 @@ export default function Dashboard() {
           <KPICard
             title="Out Of Stock"
             value={outOfStockItems}
-            icon={<Clock className="w-12 h-12 text-slate-500/70" />}
+            icon={<Clock className="h-12 w-12 text-slate-500/70" />}
             iconBg="bg-gray-100"
             iconColor="text-gray-600"
             imagePath="/images/logo/out_of_stock.jpg"
@@ -609,20 +610,20 @@ export default function Dashboard() {
           <KPICard
             title="Expired Batches"
             value={expiredStockItems}
-            icon={<Clock className="w-12 h-12 text-slate-500/70" />}
+            icon={<Clock className="h-12 w-12 text-slate-500/70" />}
             iconBg="bg-gray-100"
             iconColor="text-gray-600"
             imagePath="/images/logo/expired_batches.jpg"
           />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="w-full h-full rounded-sm bg-iceblue border-3 border-slate-700 pt-0">
-            <div className="h-full flex flex-col">
-              <CardHeader className="bg-slate-800 py-3 flex items-center justify-between">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <Card className="bg-iceblue h-full w-full rounded-sm border-3 border-slate-700 pt-0">
+            <div className="flex h-full flex-col">
+              <CardHeader className="flex items-center justify-between bg-slate-800 py-3">
                 <CardTitle className="flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-slate-100" />
-                  <p className="text-slate-100 font-semibold text-xl">
+                  <Activity className="h-5 w-5 text-slate-100" />
+                  <p className="text-xl font-semibold text-slate-100">
                     Sales Trend
                   </p>
                 </CardTitle>
@@ -630,7 +631,7 @@ export default function Dashboard() {
                   value={dateRange}
                   onValueChange={(value: DateRange) => setDateRange(value)}
                 >
-                  <SelectTrigger className=" text-slate-900 bg-slate-100">
+                  <SelectTrigger className="bg-slate-100 text-slate-900">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -642,30 +643,30 @@ export default function Dashboard() {
                   </SelectContent>
                 </Select>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                <div className="flex-1 flex items-center justify-center pt-10 xl:pt-0">
+              <CardContent className="flex flex-1 flex-col">
+                <div className="flex flex-1 items-center justify-center pt-10 xl:pt-0">
                   <ChartBarMinimal data={chartData} />
                 </div>
 
                 {/* Summary Stats Below Chart */}
-                <div className="mt-4 pt-4 border-t border-slate-600/50">
+                <div className="mt-4 border-t border-slate-600/50 pt-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center ">
+                    <div className="text-center">
                       <CardContent className="text-start text-slate-600">
-                        <p className="text-xs sm:text-sm font-medium  mb-1">
+                        <p className="mb-1 text-xs font-medium sm:text-sm">
                           Period Revenue
                         </p>
-                        <p className="text-xl sm:text-2xl font-extrabold text-slate-900 ">
+                        <p className="text-xl font-extrabold text-slate-900 sm:text-2xl">
                           {formatCurrency(totalRevenueByDateRange)}
                         </p>
                       </CardContent>
                     </div>
-                    <div className="text-center   border-white rounded-none">
+                    <div className="rounded-none border-white text-center">
                       <CardContent className="text-start">
-                        <p className="text-xs sm:text-sm font-medium  mb-1 text-slate-600">
+                        <p className="mb-1 text-xs font-medium text-slate-600 sm:text-sm">
                           Total Units Sold
                         </p>
-                        <p className="text-xl sm:text-2xl font-extrabold text-slate-900">
+                        <p className="text-xl font-extrabold text-slate-900 sm:text-2xl">
                           {totalUnitsSoldByDateRange.toLocaleString()}{" "}
                           {/* units */}
                         </p>
@@ -678,11 +679,11 @@ export default function Dashboard() {
           </Card>
           <div className="h-full w-full">
             {/* Recent Sales */}
-            <Card className="h-full flex flex-col bg-iceblue border-3 border-slate-700 rounded-sm pt-0">
-              <CardHeader className="bg-slate-800  py-3 flex items-center justify-between">
+            <Card className="bg-iceblue flex h-full flex-col rounded-sm border-3 border-slate-700 pt-0">
+              <CardHeader className="flex items-center justify-between bg-slate-800 py-3">
                 <CardTitle className="flex items-center gap-2">
                   <ShoppingCart className="text-white" />
-                  <p className="text-slate-100 font-semibold sm:text-xl">
+                  <p className="font-semibold text-slate-100 sm:text-xl">
                     Top Sales
                   </p>
                 </CardTitle>
@@ -693,7 +694,7 @@ export default function Dashboard() {
                       setTopSellingTab(value)
                     }
                   >
-                    <SelectTrigger className=" text-slate-900 bg-slate-100">
+                    <SelectTrigger className="bg-slate-100 text-slate-900">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -705,7 +706,7 @@ export default function Dashboard() {
                     value={dateRange}
                     onValueChange={(value: DateRange) => setDateRange(value)}
                   >
-                    <SelectTrigger className=" text-slate-900 bg-slate-100">
+                    <SelectTrigger className="bg-slate-100 text-slate-900">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -724,10 +725,10 @@ export default function Dashboard() {
                     {topSellingMedicines.slice(0, 10).map((medicine, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between p-3 bg-white/70  border border-blue-300/70 rounded-lg hover:bg-white transition-colors"
+                        className="flex items-center justify-between rounded-lg border border-blue-300/70 bg-white/70 p-3 transition-colors hover:bg-white"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center w-8 h-8 ">
+                          <div className="flex h-8 w-8 items-center justify-center">
                             <span className="text-sm font-semibold text-slate-900">
                               {index + 1}
                             </span>
@@ -735,7 +736,7 @@ export default function Dashboard() {
                           {(() => {
                             const imageUrl = medicine.imageUrl || "";
                             const gcsUrl = imageUrl.startsWith(
-                              "/images/medicine"
+                              "/images/medicine",
                             )
                               ? `https://storage.googleapis.com/pharventory-bucket${imageUrl}`
                               : imageUrl;
@@ -746,14 +747,14 @@ export default function Dashboard() {
                                 alt={medicine.name}
                                 width={200}
                                 height={40}
-                                className="w-10 h-10 rounded-md object-cover "
+                                className="h-10 w-10 rounded-md object-cover"
                                 onError={(e) => {
                                   e.currentTarget.src = "/images/logo/logo.png";
                                 }}
                               />
                             ) : (
-                              <div className="w-10 h-10 rounded-md bg-slate-100 border border-slate-200 flex items-center justify-center">
-                                <Package className="w-5 h-5 text-slate-400" />
+                              <div className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-100">
+                                <Package className="h-5 w-5 text-slate-400" />
                               </div>
                             );
                           })()}
@@ -780,7 +781,7 @@ export default function Dashboard() {
                   </div>
 
                   {topSellingMedicines.length === 0 && (
-                    <p className="text-sm text-slate-500 text-center py-8">
+                    <p className="py-8 text-center text-sm text-slate-500">
                       No recent sales data
                     </p>
                   )}
@@ -790,18 +791,18 @@ export default function Dashboard() {
           </div>
         </div>
         {/* Alerts Zone */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6  ">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Critical Stock Alerts */}
-          <Card className="bg-iceblue border-3 rounded-sm border-slate-700 pt-0">
-            <CardHeader className="bg-slate-800   py-3 flex items-center">
+          <Card className="bg-iceblue rounded-sm border-3 border-slate-700 pt-0">
+            <CardHeader className="flex items-center bg-slate-800 py-3">
               <CardTitle className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-rose-600" />
-                <p className="text-slate-100 font-semibold text-xl">
+                <AlertTriangle className="h-5 w-5 text-rose-600" />
+                <p className="text-xl font-semibold text-slate-100">
                   Critical Stock Alerts
                 </p>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 max-h-64 overflow-y-auto">
+            <CardContent className="max-h-64 space-y-3 overflow-y-auto">
               {criticalStockAlerts.length > 0 ? (
                 criticalStockAlerts.map((medicine, index) => (
                   <AlertItem
@@ -815,7 +816,7 @@ export default function Dashboard() {
                   />
                 ))
               ) : (
-                <p className="text-sm text-slate-500 text-center py-4">
+                <p className="py-4 text-center text-sm text-slate-500">
                   No critical stock items
                 </p>
               )}
@@ -823,16 +824,16 @@ export default function Dashboard() {
           </Card>
 
           {/* Low Stock Alerts */}
-          <Card className="bg-iceblue border-3 rounded-sm  border-slate-700 pt-0">
-            <CardHeader className="bg-slate-800   py-3 flex items-center ">
-              <CardTitle className="flex items-center gap-2  ">
-                <AlertTriangle className=" text-yellow-600 " />
-                <p className="text-slate-100   font-semibold text-xl ">
+          <Card className="bg-iceblue rounded-sm border-3 border-slate-700 pt-0">
+            <CardHeader className="flex items-center bg-slate-800 py-3">
+              <CardTitle className="flex items-center gap-2">
+                <AlertTriangle className="text-yellow-600" />
+                <p className="text-xl font-semibold text-slate-100">
                   Low Stock Alerts{" "}
                 </p>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 max-h-64 overflow-y-auto">
+            <CardContent className="max-h-64 space-y-3 overflow-y-auto">
               {lowStockAlerts.filter((med) => med.stock > 25).length > 0 ? (
                 lowStockAlerts
                   .filter((med) => med.stock > 25)
@@ -848,7 +849,7 @@ export default function Dashboard() {
                     />
                   ))
               ) : (
-                <p className="text-sm text-slate-500 text-center py-4">
+                <p className="py-4 text-center text-sm text-slate-500">
                   No low stock items
                 </p>
               )}
@@ -856,11 +857,11 @@ export default function Dashboard() {
           </Card>
 
           {/* Expiring Medicines - Full Width */}
-          <Card className="bg-iceblue border-3 rounded-sm border-slate-700 pt-0">
-            <CardHeader className="bg-slate-800  py-3 flex items-center justify-between">
+          <Card className="bg-iceblue rounded-sm border-3 border-slate-700 pt-0">
+            <CardHeader className="flex items-center justify-between bg-slate-800 py-3">
               <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-red-600" />
-                <p className="text-slate-100 font-semibold text-xl">
+                <Clock className="h-5 w-5 text-red-600" />
+                <p className="text-xl font-semibold text-slate-100">
                   Expiring Batches
                 </p>
               </CardTitle>
@@ -868,7 +869,7 @@ export default function Dashboard() {
                 value={expiryRange}
                 onValueChange={(value: ExpiryRange) => setExpiryRange(value)}
               >
-                <SelectTrigger className="h-5 py-0 w-[120px] bg-slate-100 ">
+                <SelectTrigger className="h-5 w-[120px] bg-slate-100 py-0">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -879,7 +880,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               {expiringMedicines.length > 0 ? (
-                <div className="space-y-3 max-h-64 overflow-y-auto">
+                <div className="max-h-64 space-y-3 overflow-y-auto">
                   {expiringMedicines.map((medicine, index) => (
                     <AlertItem
                       key={index}
@@ -893,7 +894,7 @@ export default function Dashboard() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 text-center py-8">
+                <p className="py-8 text-center text-sm text-slate-500">
                   No medicines expiring in the next{" "}
                   {expiryRange === "1month" ? "1 month" : "3 months"}
                 </p>
@@ -901,16 +902,16 @@ export default function Dashboard() {
             </CardContent>
           </Card>
           {/* Expired Batches */}
-          <Card className="bg-iceblue border-3 rounded-sm border-slate-700 pt-0">
-            <CardHeader className="bg-slate-800    py-3 flex items-center">
+          <Card className="bg-iceblue rounded-sm border-3 border-slate-700 pt-0">
+            <CardHeader className="flex items-center bg-slate-800 py-3">
               <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-slate-500/70" />
-                <p className="text-slate-100 font-semibold text-xl">
+                <Clock className="h-5 w-5 text-slate-500/70" />
+                <p className="text-xl font-semibold text-slate-100">
                   Expired Batches (Already expired)
                 </p>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 max-h-64 overflow-y-auto">
+            <CardContent className="max-h-64 space-y-3 overflow-y-auto">
               {expiredMedicines.length > 0 ? (
                 expiredMedicines.map((medicine, index) => (
                   <AlertItem
@@ -924,23 +925,23 @@ export default function Dashboard() {
                   />
                 ))
               ) : (
-                <p className="text-sm text-slate-100 text-center py-4">
+                <p className="py-4 text-center text-sm text-slate-100">
                   No expired batches
                 </p>
               )}
             </CardContent>
           </Card>
           {/* Out Of Stock */}
-          <Card className="bg-iceblue border-3 rounded-sm border-slate-700 pt-0">
-            <CardHeader className="bg-slate-800    py-3 flex items-center">
+          <Card className="bg-iceblue rounded-sm border-3 border-slate-700 pt-0">
+            <CardHeader className="flex items-center bg-slate-800 py-3">
               <CardTitle className="flex items-center gap-2">
-                <X className="w-5 h-5 text-red-600" />
-                <p className="text-slate-100 font-semibold text-xl">
-                   Out Of Stock
+                <X className="h-5 w-5 text-red-600" />
+                <p className="text-xl font-semibold text-slate-100">
+                  Out Of Stock
                 </p>
               </CardTitle>
             </CardHeader>
-             <CardContent className="space-y-3 max-h-64 overflow-y-auto">
+            <CardContent className="max-h-64 space-y-3 overflow-y-auto">
               {outOfStockAlerts.length > 0 ? (
                 outOfStockAlerts.map((medicine, index) => (
                   <AlertItem
@@ -954,7 +955,7 @@ export default function Dashboard() {
                   />
                 ))
               ) : (
-                <p className="text-sm text-slate-100 text-center py-4">
+                <p className="py-4 text-center text-sm text-slate-100">
                   No out of stock items
                 </p>
               )}

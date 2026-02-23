@@ -5,7 +5,7 @@ import useReceipts from "@/hooks/useReceipts";
 import { useReceiptStore, ReceiptRange } from "@/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ReceiptModal } from "./receipt-modal";
+import { ReceiptModal } from "../../components/features/receipt/receipt-modal";
 
 type ReceiptItemType = {
   id: number;
@@ -84,10 +84,12 @@ interface ReceiptCardProps {
 
 const ReceiptCard: React.FC<ReceiptCardProps> = ({ title, value }) => {
   return (
-    <Card className="bg-slate-800 border-3 border-slate-900 rounded-lg">
+    <Card className="rounded-lg border-3 border-slate-900 bg-slate-800">
       <CardContent className="">
-        <CardTitle className=" sm:text-lg text-slate-300 mb-1">{title}</CardTitle>
-        <p className={`sm:text-3xl font-semibold text-white`}>{value}</p>
+        <CardTitle className="mb-1 text-slate-300 sm:text-lg">
+          {title}
+        </CardTitle>
+        <p className={`font-semibold text-white sm:text-3xl`}>{value}</p>
       </CardContent>
     </Card>
   );
@@ -119,16 +121,16 @@ function Receipt() {
         <td align="right">${it.quantity}</td>
         <td align="right">฿${Number(it.price ?? 0).toFixed(2)}</td>
         <td align="right">฿${(Number(it.price ?? 0) * it.quantity || 0).toFixed(
-          2
+          2,
         )}</td>
-      </tr>`
+      </tr>`,
       )
       .join("");
 
     const total = (selectedReceipt.items || []).reduce(
       (s: number, it: ReceiptItemType) =>
         s + Number(it.price ?? 0) * it.quantity,
-      0
+      0,
     );
 
     const html = `
@@ -151,7 +153,7 @@ function Receipt() {
         </table>
         <hr/>
         <div style="text-align:right;font-weight:bold">Total: ฿${total.toFixed(
-          2
+          2,
         )}</div>
       </body>
       </html>
@@ -209,7 +211,7 @@ function Receipt() {
   const currentPageIndex = Math.min(pageIndex, pageCount - 1);
   const paginatedReceipts = filteredReceipts.slice(
     currentPageIndex * pageSize,
-    currentPageIndex * pageSize + pageSize
+    currentPageIndex * pageSize + pageSize,
   );
 
   // Reset page index when filtered results change
@@ -226,10 +228,10 @@ function Receipt() {
   const summary = useMemo(() => {
     const totalItems = dataset.reduce(
       (sum, receipt) => sum + receipt.totalItems,
-      0
+      0,
     );
     const uniquePatients = new Set(
-      dataset.map((receipt) => receipt.patientName || receipt.id)
+      dataset.map((receipt) => receipt.patientName || receipt.id),
     ).size;
 
     // Calculate today's receipts separately
@@ -250,8 +252,8 @@ function Receipt() {
 
   return (
     <div className="p-8">
-      <div className=" space-y-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <ReceiptCard
             title="Today's Receipts"
             value={summary.todayReceiptsCount}
@@ -261,14 +263,14 @@ function Receipt() {
           <ReceiptCard title="Unique Patients" value={summary.uniquePatients} />
         </div>
 
-        <div className="bg-slate-800 border-3 border-slate-800 rounded-lg p-3 space-y-4">
-          <div className="flex flex-wrap gap-3 items-center">
-            <div className="flex-1 min-w-[220px] ">
+        <div className="space-y-4 rounded-lg border-3 border-slate-800 bg-slate-800 p-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="min-w-[220px] flex-1">
               <Input
                 placeholder="Search by receipt ID or patient name..."
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                className="border-slate-600 placeholder:text-muted-foreground bg-slate-200"
+                className="placeholder:text-muted-foreground border-slate-600 bg-slate-200"
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -291,8 +293,8 @@ function Receipt() {
         <div
         // className="grid grid-cols-3 gap-6"
         >
-          <div className="col-span-2 bg-slate-900/20 border border-slate-900/20 rounded-sm">
-            <div className="px-6 py-4 bg-slate-100  rounded-t-sm flex items-center justify-between">
+          <div className="col-span-2 rounded-sm border border-slate-900/20 bg-slate-900/20">
+            <div className="flex items-center justify-between rounded-t-sm bg-slate-100 px-6 py-4">
               <div>
                 <p className="text-sm font-medium text-slate-900">
                   Receipt History
@@ -308,7 +310,7 @@ function Receipt() {
               {paginatedReceipts.map((receipt) => (
                 <div
                   key={receipt.id}
-                  className="px-6 py-4 grid grid-cols-4 items-center gap-4 border border-slate-300"
+                  className="grid grid-cols-4 items-center gap-4 border border-slate-300 px-6 py-4"
                 >
                   <div>
                     <p className="text-sm font-semibold text-slate-900">
@@ -341,11 +343,11 @@ function Receipt() {
                     </p>
                   </div>
 
-                  <div className="text-right flex gap-2">
+                  <div className="flex gap-2 text-right">
                     <Button
                       variant="secondary"
                       size="sm"
-                      className="whitespace-normal text-center p-2 text-xs sm:text-sm w-fit bg-slate-100 border-2 border-slate-300"
+                      className="w-fit border-2 border-slate-300 bg-slate-100 p-2 text-center text-xs whitespace-normal sm:text-sm"
                       onClick={async () => {
                         const data = await findReceiptById(receipt.id);
                         if (!data) return alert("Unable to fetch receipt");
@@ -361,21 +363,21 @@ function Receipt() {
 
               {!paginatedReceipts.length && (
                 <div className="px-6 py-12 text-center text-slate-500">
-                  <Calendar className="w-10 h-10 mx-auto mb-3 text-slate-300" />
+                  <Calendar className="mx-auto mb-3 h-10 w-10 text-slate-300" />
                   <p>No receipts for the selected range.</p>
                 </div>
               )}
             </div>
 
             {/* Pagination controls */}
-            <div className="flex items-center justify-center gap-2 px-6 py-4 bg-slate-900/20 ">
+            <div className="flex items-center justify-center gap-2 bg-slate-900/20 px-6 py-4">
               <Button
                 onClick={() => setPageIndex(0)}
                 disabled={currentPageIndex <= 0}
                 variant={"default"}
               >
                 <svg
-                  className="w-4 h-4"
+                  className="h-4 w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -394,7 +396,7 @@ function Receipt() {
                 variant={"default"}
               >
                 <svg
-                  className="w-4 h-4"
+                  className="h-4 w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -408,7 +410,7 @@ function Receipt() {
                 </svg>
               </Button>
 
-              <div className="px-4 text-sm text-slate-100 font-medium">
+              <div className="px-4 text-sm font-medium text-slate-100">
                 Page {currentPageIndex + 1} of {pageCount}
               </div>
 
@@ -420,7 +422,7 @@ function Receipt() {
                 variant={"default"}
               >
                 <svg
-                  className="w-4 h-4"
+                  className="h-4 w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -439,7 +441,7 @@ function Receipt() {
                 disabled={currentPageIndex >= pageCount - 1}
               >
                 <svg
-                  className="w-4 h-4"
+                  className="h-4 w-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -457,7 +459,7 @@ function Receipt() {
         </div>
 
         {receiptsError && (
-          <div className="bg-rose-50 text-rose-700 border border-rose-100 rounded-lg px-4 py-3">
+          <div className="rounded-lg border border-rose-100 bg-rose-50 px-4 py-3 text-rose-700">
             {receiptsError.message ?? "Unable to load receipts"}
           </div>
         )}
