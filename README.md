@@ -23,7 +23,7 @@ The system addresses complex stock management challenges, minimizes human error,
     - Low Stock (< 100)
     - Expired / Expiring Batches
   
-### 💊Inventory Management
+### 💊 Inventory Management
 - **Search & Filtering**
   - Filter by stock status (Normal, Low Stock, Critical Stock, Out of Stock)
   - Separate views for expired and near-expiry medicines
@@ -41,7 +41,7 @@ The system addresses complex stock management challenges, minimizes human error,
 
 ### 🧾 Receipt History
 - **View dispensed medicines, quantities, prices, patient names, and timestamps**
-- **Synchronized withdispensing systems**
+- **Synchronized with dispensing systems**
   
 ### 💳 Dispensing System
 - **FEFO (First Expire First Out) – automatically selects batches with the nearest expiration date**
@@ -87,10 +87,22 @@ app/
 ├── receipt/               # Receipt history page
 ├── stocklogs/             # Stock movement logs page
 ├── login/                 # Authentication page
-├── components/            # Shared components
-├── hooks/                 # Custom React hooks
-├── store/                 # State management
-└── types/                 # TypeScript type definitions
+
+components/                # Shared components
+├── features/              # Feature-specific components
+│   ├── dashboard/
+│   ├── dispense/
+│   ├── inventory/
+│   ├── receipt/
+│   └── stocklogs/
+├── layout/                # Layout components
+├── shared/                # Shared components
+└── ui/                    # UI components (shadcn/ui)
+hooks/                     # Custom React hooks
+lib/                       # Utilities and configuration
+providers/                 # React providers
+store/                     # State management
+types/                     # TypeScript type definitions
 ```
 
 ---
@@ -104,7 +116,7 @@ app/
 - **TypeORM** - ORM for database operations
 - **JWT**/bcrypt - Authentication token
 - **Google Cloud Storage** - File storage
-- **Google cloud run** Deployment
+- **Google Cloud run** Deployment
 - **Docker** - Containerization
 
 ### Frontend
@@ -113,7 +125,7 @@ app/
 - **React Query** - Data fetching และ caching
 - **Tailwind CSS** - Styling framework
 - **shadcn/ui** - Component library
-- **Chartjs** - Chartjs
+- **Chart.js** - Chart.js - Data visualization
 - **Lucide React** - Icon library
 
 ## 🔧 Highlights
