@@ -11,4 +11,3 @@ export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {
   @IsString()
   description?: string;
 }
-
