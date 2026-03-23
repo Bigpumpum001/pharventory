@@ -94,7 +94,8 @@ jobs:
             --memory ${{secrets.CLOUD_RUN_MEMORY}} \
             --cpu ${{secrets.CLOUD_RUN_CPU}} \
             --max-instances ${{secrets.CLOUD_RUN_MAX_INSTANCES}} \
-            --timeout ${{secrets.CLOUD_RUN_TIMEOUT}}
+            --timeout ${{secrets.CLOUD_RUN_TIMEOUT}} \
+            --service-account ${{secrets.CLOUD_RUN_SERVICE_ACCOUNT}}
           else
           gcloud run deploy ${{secrets.CLOUD_RUN_SERVICE_NAME}} \
             --image asia-southeast1-docker.pkg.dev/spheric-rhythm-473010-d7/pharventory-backend/pharventory:latest \
@@ -105,5 +106,6 @@ jobs:
             --memory ${{secrets.CLOUD_RUN_MEMORY}} \
             --cpu ${{secrets.CLOUD_RUN_CPU}} \
             --max-instances ${{secrets.CLOUD_RUN_MAX_INSTANCES}} \
-            --timeout ${{secrets.CLOUD_RUN_TIMEOUT}}
+            --timeout ${{secrets.CLOUD_RUN_TIMEOUT}} \
+            --service-account ${{secrets.CLOUD_RUN_SERVICE_ACCOUNT}}
           fi
