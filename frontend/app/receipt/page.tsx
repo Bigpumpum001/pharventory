@@ -217,13 +217,11 @@ function Receipt() {
   // Reset page index when filtered results change
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (pageIndex !== 0) {
-        setPageIndex(0);
-      }
+      setPageIndex(0);
     }, 300); // 300ms debounce delay
 
     return () => clearTimeout(timeoutId);
-  }, [search, range, pageIndex]);
+  }, [search, range]);
 
   const summary = useMemo(() => {
     const totalItems = dataset.reduce(
