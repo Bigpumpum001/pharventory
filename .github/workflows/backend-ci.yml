@@ -19,7 +19,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: ./backend/package-lock.json
 
       - name: Install dependencies
         working-directory: ./backend
@@ -41,8 +43,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: "read"
+      id-token: "write"
 
     steps:
       - name: Checkout code
@@ -113,3 +115,4 @@ jobs:
             --cpu ${{secrets.CLOUD_RUN_CPU}} \
             --max-instances ${{secrets.CLOUD_RUN_MAX_INSTANCES}} \
             --timeout ${{secrets.CLOUD_RUN_TIMEOUT}}
+          fi
