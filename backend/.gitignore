@@ -1,4 +1,5 @@
 *.json
+!package-lock.json
 toothtoday-gcs.json
 # compiled output
 /dist
